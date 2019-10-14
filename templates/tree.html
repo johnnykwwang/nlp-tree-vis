@@ -1,0 +1,61 @@
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>ListOps Visualization</title>
+        <script src="{{ url_for('static', filename='svg-tree-drawer.js') }}"></script>
+        <style>
+        svg text {
+            padding:0.5em;
+            padding-left:0.20em;
+            padding-right:0.20em;
+        }
+        svg g.collapsed g text {
+            padding-left:0.5ex;
+            padding-right:0.5ex;
+        }
+        svg line,
+        svg polyline {
+            font-size:1em; /*height not honored here by WebKit*/
+        }
+        svg polyline {
+            fill:none;
+        }
+        
+        .shortTree line,
+        .shortTree polyline {
+            font-size:0.25em;
+        }
+        .tallTree line,
+        .tallTree polyline {
+            font-size:2em;
+        }
+        </style>
+    </head>
+    <body>
+
+      <form action="/tree" method="post">
+        Data: <input type='text' name='data'></input><br>
+        <input type="submit" value="Submit">
+      </form>
+      <hr>
+      <div>
+        Input ListOps Tree: {{ data }}
+      </div>
+
+      {% if tree_json_string %}
+          <p id="tree"></p>
+          <script>
+          var treeObject = {{ tree_json_string | safe }};
+          var tree = new TreeDrawer(
+              document.getElementById('tree'), treeObject
+          );
+          tree.draw();
+          </script>
+      {% endif %}
+
+        
+    </body>
+</html>
